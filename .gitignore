@@ -7,7 +7,9 @@
 *.pot
 *.pyc
 __pycache__/
-local_settings.py
+settings.py
 db.sqlite3
-media
+/media
 venv
+/static
+# '/' dictates that only root static folder should be ignored
