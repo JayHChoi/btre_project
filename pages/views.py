@@ -8,6 +8,11 @@ from listings.choices import price_choices, bedroom_choices, state_choices
 
 
 class IndexView(generic.TemplateView):
+    """
+    The generic.TemplateView does not have 'get_queryset' function
+    nor a default queryset passed to the context
+    Thus, this is done below by defining 'listing' queryset and passing it manually to context
+    """
     template_name = 'pages/index.html'
     listings = Listing.objects.order_by(
         '-list_date').filter(is_published=True)[:3]
