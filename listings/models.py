@@ -1,8 +1,9 @@
-from django.db import models
 from datetime import datetime
+from django.db import models
 from django.urls import reverse
 
 from realtors.models import Realtor
+
 
 class Listing(models.Model):
     realtor = models.ForeignKey(Realtor, on_delete=models.DO_NOTHING)

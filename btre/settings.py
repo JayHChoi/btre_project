@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from django.contrib.messages import constants as messages
+from decouple import config
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -33,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'contacts.apps.ContactsConfig',
     'accounts.apps.AccountsConfig',
     'pages.apps.PagesConfig',
     'listings.apps.ListingsConfig',
@@ -141,3 +143,11 @@ MEDIA_URL = '/media/'
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
+
+# Email config
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.naver.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'hjchoi_89@naver.com'
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
+EMAIL_USE_TLS = True
