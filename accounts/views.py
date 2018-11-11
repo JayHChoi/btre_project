@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, DetailView
+from django.shortcuts import redirect
+from django.views.generic import TemplateView
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
+
+from contacts.models import Contact
 
 
 class RegisterView(TemplateView):
@@ -29,7 +31,9 @@ class RegisterView(TemplateView):
                 if User.objects.filter(email=email).exists():
                     messages.error(request, 'That email is being used')
                     return redirect('register')
-            user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+            user = User.objects.create_user(username=username, password=password,
+                                            email=email, first_name=first_name,
+                                            last_name=last_name)
             # Login after register
             # auth.login(request, user)
             # messages.success(request, 'You are now logged in')
@@ -49,9 +53,7 @@ class LoginView(TemplateView):
         # Login User
         username = request.POST['username']
         password = request.POST['password']
-
         user = auth.authenticate(username=username, password=password)
-        
         if user is not None:
             auth.login(request, user)
             messages.success(request, 'You are now logged in')
@@ -63,7 +65,14 @@ class LoginView(TemplateView):
 
 class DashboardView(TemplateView):
     template_name = "accounts/dashboard.html"
-    model = User
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_contacts = Contact.objects.order_by('-contact_date').filter(
+            user_id=self.request.user.id
+        )
+        context['user_contacts'] = user_contacts
+        return context
 
 
 def logout(request):
